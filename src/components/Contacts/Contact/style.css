@@ -1,0 +1,16 @@
+.contact .fa-sort-down,
+.contact .fa-sort-up {
+  position: relative;
+}
+
+.contact .fa-sort-down {
+  top: -3px;
+}
+
+.contact .fa-sort-up {
+  top: 6px;
+}
+
+.contact .icon-delete {
+  float: right;
+}

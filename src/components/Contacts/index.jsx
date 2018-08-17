@@ -1,12 +1,31 @@
 import React, { Component } from 'react'
 
 import { Consumer } from '../../Context'
-import Contact from '../Contact'
+import Contact from './Contact'
 
 class Contacts extends Component {
-  renderContacts({ contacts }) {
+  state = {
+    infoId: '',
+  }
+
+  handleClickInfo = (contact) => {
+    const { infoId } = this.state
+
+    this.setState({
+      infoId: infoId === contact.id ? '' : contact.id,
+    })
+  }
+
+  renderContacts = ({ contacts }) => {
+    const { infoId } = this.state
+
     return contacts.map(contact => (
-      <Contact key={contact.id} contact={contact} />
+      <Contact
+        key={contact.id}
+        contact={contact}
+        infoId={infoId}
+        handleClickInfo={this.handleClickInfo}
+      />
     ))
   }
 

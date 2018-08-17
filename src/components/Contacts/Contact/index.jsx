@@ -3,27 +3,11 @@ import PropTypes from 'prop-types'
 
 import './style.css'
 
-import { Consumer } from '../../Context'
+import { Consumer } from '../../../Context'
 import Info from './Info'
 import Icon from './Icon'
 
 class Contact extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      showContactInfo: false,
-    }
-  }
-
-  onClickSort = () => {
-    const { showContactInfo } = this.state
-
-    this.setState({
-      showContactInfo: !showContactInfo,
-    })
-  }
-
   onClickDelete(dispatch) {
     const { contact } = this.props
 
@@ -33,18 +17,23 @@ class Contact extends Component {
     })
   }
 
+  handleClickInfo = () => {
+    const { contact, handleClickInfo } = this.props
+    handleClickInfo(contact)
+  }
+
   renderCard = ({ dispatch }) => {
-    const { contact } = this.props
-    const { showContactInfo } = this.state
+    const { contact, infoId } = this.props
+    const showInfo = infoId === contact.id
 
     return (
       <div className="card card-body mb-3 contact">
         <h4>
           {contact.name}
-          <Icon handleClick={this.onClickSort} classNames="sort-down ml-1 cp" />
+          <Icon handleClick={this.handleClickInfo} classNames={`sort-${showInfo ? 'up' : 'down'} ml-1 cp`} />
           <Icon handleClick={this.onClickDelete.bind(this, dispatch)} classNames="times icon-delete cp text-danger" />
         </h4>
-        <Info show={showContactInfo} contact={contact} />
+        <Info show={showInfo} contact={contact} />
       </div>
     )
   }
@@ -59,6 +48,7 @@ class Contact extends Component {
 }
 
 Contact.propTypes = {
+  handleClickInfo: PropTypes.func.isRequired,
   contact: PropTypes.shape({
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
