@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'font-awesome/css/font-awesome.min.css'
@@ -8,18 +8,14 @@ import Header from '../layouts/Header'
 import AddContact from '../Contacts/AddContact'
 import Contacts from '../Contacts'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Header branding="Contact Manager" />
-        <div className="container">
-          <AddContact />
-          <Contacts />
-        </div>
-      </div>
-    )
-  }
-}
+const App = () => (
+  <div className="app">
+    <Header branding="Contact Manager" />
+    <div className="container">
+      <AddContact />
+      <Contacts />
+    </div>
+  </div>
+)
 
 export default App

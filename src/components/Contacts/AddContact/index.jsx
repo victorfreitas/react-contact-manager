@@ -4,7 +4,7 @@ import { Consumer } from '../../../Context'
 import Body from './Body'
 import Header from './Header'
 
-export default () => (
+const AddContact = () => (
   <Consumer>
     {({ contacts, dispatch }) => (
       <div className="card mb-3">
@@ -14,3 +14,5 @@ export default () => (
     )}
   </Consumer>
 )
+
+export default AddContact

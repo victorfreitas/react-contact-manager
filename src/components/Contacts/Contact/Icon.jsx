@@ -1,8 +1,10 @@
 import React from 'react'
 
-export default ({ handleClick, classNames }) => (
+const Icon = ({ handleClick, classNames }) => (
   <i
     className={`fa fa-${classNames}`}
     onClick={handleClick}
   />
 )
+
+export default Icon

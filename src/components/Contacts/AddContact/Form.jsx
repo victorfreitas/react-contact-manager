@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import uuid from 'uuid'
 
 import FormGroup from './FormGroup'
 
@@ -23,19 +24,24 @@ class Form extends Component {
 
   onSubmit = (event) => {
     event.preventDefault()
-    const { contacts, dispatch } = this.props
+    const { dispatch } = this.props
     const { name, email, phone } = this.state
 
     this.setState({ ...defaultState })
     dispatch({
       type: 'ADD_CONTACT',
       payload: {
-        id: contacts.length + 1,
+        id: uuid(),
         name,
         email,
         phone,
       },
     })
+  }
+
+  isEnabled() {
+    const { name, email, phone } = this.state
+    return !(name && email && phone)
   }
 
   renderFormGroups() {
@@ -63,6 +69,7 @@ class Form extends Component {
           type="submit"
           value="Add Contact"
           className="btn btn-light btn-block"
+          disabled={this.isEnabled()}
         />
       </form>
     )
@@ -70,7 +77,6 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  contacts: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired,
 }
 
