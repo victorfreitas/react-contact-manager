@@ -8,26 +8,52 @@ const defaultState = {
   name: '',
   email: '',
   phone: '',
+  errors: {},
 }
 const groups = [
-  { name: 'name', label: 'Name' },
-  { name: 'email', label: 'Email' },
-  { name: 'phone', label: 'Phone' },
+  { type: 'text', name: 'name', label: 'Name' },
+  { type: 'email', name: 'email', label: 'Email' },
+  { type: 'tel', name: 'phone', label: 'Phone' },
 ]
 
 class Form extends Component {
   state = defaultState
 
   handleChange = ({ target: { name, value } }) => {
+    const { errors } = this.state
+
+    if (errors[name] && value.trim()) {
+      delete errors[name]
+    }
+
     this.setState({ [name]: value })
   }
 
   onSubmit = (event) => {
     event.preventDefault()
-    const { dispatch } = this.props
-    const { name, email, phone } = this.state
 
-    this.setState({ ...defaultState })
+    const { name, email, phone } = this.state
+    const errors = {}
+
+    if (!name.trim()) {
+      errors.name = 'Name is required'
+    }
+
+    if (!email.trim()) {
+      errors.email = 'Email is required'
+    }
+
+    if (!phone.trim()) {
+      errors.phone = 'Phone is required'
+    }
+
+    if (Object.entries(errors).length) {
+      this.setState({ errors })
+      return
+    }
+
+    const { dispatch } = this.props
+
     dispatch({
       type: 'ADD_CONTACT',
       payload: {
@@ -37,25 +63,23 @@ class Form extends Component {
         phone,
       },
     })
-  }
-
-  isEnabled() {
-    const { name, email, phone } = this.state
-    return !(name && email && phone)
+    this.setState({ ...defaultState })
   }
 
   renderFormGroups() {
     const state = { ...this.state }
 
     return (
-      groups.map(({ name, label }) => (
+      groups.map(({ type, name, label }) => (
         <FormGroup
+          type={type}
           name={name}
           label={label}
           key={name}
           value={state[name]}
           placeholder={`Enter ${label}...`}
           handleChange={this.handleChange}
+          error={state.errors[name]}
         />
       ))
     )
@@ -69,7 +93,6 @@ class Form extends Component {
           type="submit"
           value="Add Contact"
           className="btn btn-light btn-block"
-          disabled={this.isEnabled()}
         />
       </form>
     )

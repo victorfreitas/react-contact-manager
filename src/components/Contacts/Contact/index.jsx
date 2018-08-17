@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 import './style.css'
 
@@ -25,12 +26,16 @@ class Contact extends Component {
   renderCard = ({ dispatch }) => {
     const { contact, infoId } = this.props
     const showInfo = infoId === contact.id
+    const classes = classNames({
+      'sort-up': showInfo,
+      'sort-down': !showInfo,
+    }, 'ml-1 cp')
 
     return (
       <div className="card card-body mb-3 contact">
         <h4>
           {contact.name}
-          <Icon handleClick={this.handleClickInfo} classNames={`sort-${showInfo ? 'up' : 'down'} ml-1 cp`} />
+          <Icon handleClick={this.handleClickInfo} classNames={classes} />
           <Icon handleClick={this.onClickDelete.bind(this, dispatch)} classNames="times icon-delete cp text-danger" />
         </h4>
         <Info show={showInfo} contact={contact} />
