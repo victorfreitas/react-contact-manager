@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 import { Consumer } from '../../Context'
 import Contact from './Contact'
@@ -32,7 +32,14 @@ class Contacts extends Component {
   render() {
     return (
       <Consumer>
-        {this.renderContacts}
+        {value => (
+          <Fragment>
+            <h1 className="display-4 mb-2">
+              <span className="text-primary">Contact</span> List
+            </h1>
+            {this.renderContacts(value)}
+          </Fragment>
+        )}
       </Consumer>
     )
   }

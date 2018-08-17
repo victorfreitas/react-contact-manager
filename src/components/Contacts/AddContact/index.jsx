@@ -4,12 +4,12 @@ import { Consumer } from '../../../Context'
 import Body from './Body'
 import Header from './Header'
 
-const AddContact = () => (
+const AddContact = props => (
   <Consumer>
-    {({ contacts, dispatch }) => (
+    {value => (
       <div className="card mb-3">
         <Header />
-        <Body contacts={contacts} dispatch={dispatch} />
+        <Body {...value} {...props} />
       </div>
     )}
   </Consumer>

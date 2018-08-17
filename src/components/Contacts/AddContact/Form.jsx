@@ -64,6 +64,7 @@ class Form extends Component {
       },
     })
     this.setState({ ...defaultState })
+    this.props.history.push('/')
   }
 
   renderFormGroups() {
