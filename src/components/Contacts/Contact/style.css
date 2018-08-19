@@ -11,6 +11,12 @@
   top: 6px;
 }
 
-.contact .icon-delete {
+.contact .icon-delete,
+.contact .icon-edit {
   float: right;
+}
+
+.contact .icon-edit {
+  color: black;
+  margin-right: 1rem;
 }

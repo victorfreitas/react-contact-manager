@@ -1,21 +1,31 @@
 import React, { Component } from 'react'
 
+import request from './helpers/request'
+
 const Context = React.createContext()
 
 const reducer = (state, action) => {
   const { contacts } = state
 
   switch (action.type) {
+    case 'ADD_CONTACT':
+      return {
+        ...state,
+        contacts: [action.payload, ...state.contacts]
+      }
+
     case 'DELETE_CONTACT':
       return {
         ...state,
         contacts: contacts.filter(({ id }) => action.payload !== id),
       }
 
-    case 'ADD_CONTACT':
+    case 'UPDATE_CONTACT':
       return {
         ...state,
-        contacts: [action.payload, ...state.contacts]
+        contacts: state.contacts.map(contact => (
+          action.payload.id === contact.id ? action.payload : contact
+        ))
       }
 
       default:
@@ -28,30 +38,16 @@ class Provider extends Component {
     super(props)
 
     this.state = {
-      contacts: [
-        {
-          id: 1,
-          name: 'John Doe',
-          email: 'jdoe@mail.co',
-          phone: '432-123-258',
-        },
-        {
-          id: 2,
-          name: 'Mary Doe',
-          email: 'mdoe@mail.ru',
-          phone: '987-456-321',
-        },
-        {
-          id: 3,
-          name: 'Karen Willian',
-          email: 'karen@gmail.com',
-          phone: '256-222-999',
-        },
-      ],
+      contacts: [],
       dispatch: action => {
-        this.setState(state => reducer(state, action))
+        this.setState(prevState => reducer(prevState, action))
       },
     }
+  }
+
+  async componentDidMount() {
+    const response = await request('/users')
+    this.setState({ contacts: response  })
   }
 
   render() {

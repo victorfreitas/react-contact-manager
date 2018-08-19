@@ -7,12 +7,8 @@ const Header = ({ title }) => (
   </div>
 )
 
-Header.defaultProps = {
-  title: 'Add Contact',
-}
-
 Header.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
 }
 
 export default Header

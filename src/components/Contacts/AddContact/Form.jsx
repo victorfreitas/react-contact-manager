@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import uuid from 'uuid'
 
 import FormGroup from './FormGroup'
+
+import request from '../../../helpers/request'
 
 const defaultState = {
   name: '',
@@ -17,7 +18,37 @@ const groups = [
 ]
 
 class Form extends Component {
-  state = defaultState
+  constructor(props) {
+    super(props)
+    this.state = { ...defaultState }
+
+    this.unlisten = props.history.listen(() => {
+      this.setState({ ...defaultState })
+    })
+  }
+
+  async componentDidMount() {
+    if (!this.getIdEdit()) {
+      return
+    }
+
+    const { name, email, phone } = await request(`/users/${this.getIdEdit()}`)
+
+    this.setState({
+      name,
+      email,
+      phone,
+    })
+  }
+
+  componentWillUnmount() {
+    this.unlisten()
+  }
+
+  getIdEdit() {
+    const { match: { params } } = this.props
+    return parseInt(params.id || 0, 10)
+  }
 
   handleChange = ({ target: { name, value } }) => {
     const { errors } = this.state
@@ -29,7 +60,7 @@ class Form extends Component {
     this.setState({ [name]: value })
   }
 
-  onSubmit = (event) => {
+  onSubmit = async (event) => {
     event.preventDefault()
 
     const { name, email, phone } = this.state
@@ -52,19 +83,27 @@ class Form extends Component {
       return
     }
 
-    const { dispatch } = this.props
+    const { dispatch, history } = this.props
+    const id = this.getIdEdit()
+    const method = id ? 'put' : 'post'
+
+    const contact = await request[method](
+      `/users/${id ? id : ''}`,
+      { name, email, phone }
+    )
 
     dispatch({
-      type: 'ADD_CONTACT',
+      type: `${id ? 'UPDATE' : 'ADD'}_CONTACT`,
       payload: {
-        id: uuid(),
-        name,
-        email,
-        phone,
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        id: contact.id,
       },
     })
+
     this.setState({ ...defaultState })
-    this.props.history.push('/')
+    history.push('/')
   }
 
   renderFormGroups() {
@@ -92,7 +131,7 @@ class Form extends Component {
         {this.renderFormGroups()}
         <input
           type="submit"
-          value="Add Contact"
+          value="Save"
           className="btn btn-light btn-block"
         />
       </form>
