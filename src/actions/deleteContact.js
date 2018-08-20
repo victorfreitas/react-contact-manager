@@ -1,7 +1,7 @@
 import { DELETE_CONTACTS } from './types'
 import request from '../helpers/request'
 
-export default (id, dispatch) => {
+export default id => dispatch => (
   request.delete(`/users/${id}`)
     .then(() => (
       dispatch({
@@ -10,4 +10,4 @@ export default (id, dispatch) => {
       })
     ))
     .catch(() => {})
-}
+)

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import { deleteContact } from '../../../actions'
 
@@ -56,8 +57,10 @@ Contact.propTypes = {
   }).isRequired
 }
 
-const mapDispatchToProps = dispatch => ({
-  deleteContact: id => deleteContact(id, dispatch),
-})
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    deleteContact,
+  }, dispatch)
+)
 
 export default connect(null, mapDispatchToProps)(Contact)

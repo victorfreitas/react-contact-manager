@@ -18,12 +18,9 @@ class MakeContact {
     this.method = id ? 'put' : 'post'
     this.type = id ? UPDATE_CONTACT : ADD_CONTACT
     this.url = `/users/${id ? id : ''}`
-
-    console.log(id)
   }
 
   request() {
-    console.log(this.type)
     request[this.method](this.url, this.contact)
       .then(contact => (
         this.dispatch({
@@ -35,6 +32,6 @@ class MakeContact {
   }
 }
 
-export default (contact, dispatch) => (
+export default contact => dispatch => (
   new MakeContact(contact, dispatch)
 )

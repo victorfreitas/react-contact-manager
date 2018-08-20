@@ -22,6 +22,6 @@ class GetContacts {
   }
 }
 
-export default (id, dispatch) => (
+export default id => dispatch => (
   new GetContacts(id, dispatch)
 )

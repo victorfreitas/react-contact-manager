@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import { makeContact, setCurrentContact, getContacts } from '../../../actions'
 import FormGroup from './FormGroup'
@@ -132,10 +133,12 @@ const mapStateToProps = state => ({
   current: state.contact.current,
 })
 
-const mapDispatchToProps = dispatch => ({
-  makeContact: contact => makeContact(contact, dispatch),
-  setCurrentContact: contact => setCurrentContact(contact, dispatch),
-  getContacts: id => getContacts(id, dispatch),
-})
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    makeContact,
+    setCurrentContact,
+    getContacts,
+  }, dispatch)
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)

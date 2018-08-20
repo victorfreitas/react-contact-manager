@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import Contact from './Contact'
 
@@ -58,8 +59,10 @@ const mapStateToProps = state => ({
   contacts: state.contact.contacts,
 })
 
-const mapDispatchToProps = dispatch => ({
-  getContacts: id => getContacts(id, dispatch),
-})
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    getContacts,
+  }, dispatch)
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contacts)
