@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
+import { makeContact, setCurrentContact, getContacts } from '../../../actions'
 import FormGroup from './FormGroup'
 
-import request from '../../../helpers/request'
-
-const defaultState = {
-  name: '',
-  email: '',
-  phone: '',
-  errors: {},
-}
 const groups = [
   { type: 'text', name: 'name', label: 'Name' },
   { type: 'email', name: 'email', label: 'Email' },
@@ -20,25 +14,15 @@ const groups = [
 class Form extends Component {
   constructor(props) {
     super(props)
-    this.state = { ...defaultState }
-
-    this.unlisten = props.history.listen(() => {
-      this.setState({ ...defaultState })
-    })
+    this.unlisten = props.history.listen(() => this.clear())
   }
 
-  async componentDidMount() {
-    if (!this.getIdEdit()) {
-      return
+  componentDidMount() {
+    const { getContacts } = this.props
+
+    if (this.getIdEdit()) {
+      getContacts(this.getIdEdit())
     }
-
-    const { name, email, phone } = await request(`/users/${this.getIdEdit()}`)
-
-    this.setState({
-      name,
-      email,
-      phone,
-    })
   }
 
   componentWillUnmount() {
@@ -51,19 +35,24 @@ class Form extends Component {
   }
 
   handleChange = ({ target: { name, value } }) => {
-    const { errors } = this.state
+    const { current: { errors } } = this.props
 
     if (errors[name] && value.trim()) {
       delete errors[name]
     }
 
-    this.setState({ [name]: value })
+    this.setCurrent({ [name]: value })
   }
 
-  onSubmit = async (event) => {
+  setCurrent(current) {
+    const { setCurrentContact } = this.props
+    setCurrentContact(current)
+  }
+
+  onSubmit = (event) => {
     event.preventDefault()
 
-    const { name, email, phone } = this.state
+    const { current: { id, name, email, phone } } = this.props
     const errors = {}
 
     if (!name.trim()) {
@@ -79,35 +68,29 @@ class Form extends Component {
     }
 
     if (Object.entries(errors).length) {
-      this.setState({ errors })
+      this.setCurrent({ errors })
       return
     }
 
-    const { dispatch, history } = this.props
-    const id = this.getIdEdit()
-    const method = id ? 'put' : 'post'
+    const { makeContact, history } = this.props
 
-    const contact = await request[method](
-      `/users/${id ? id : ''}`,
-      { name, email, phone }
-    )
-
-    dispatch({
-      type: `${id ? 'UPDATE' : 'ADD'}_CONTACT`,
-      payload: {
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone,
-        id: contact.id,
-      },
-    })
-
-    this.setState({ ...defaultState })
+    makeContact({ id, name, email, phone })
+    this.clear()
     history.push('/')
   }
 
+  clear() {
+    this.setCurrent({
+      id: null,
+      name: '',
+      email: '',
+      phone: '',
+      errors: {},
+    })
+  }
+
   renderFormGroups() {
-    const state = { ...this.state }
+    const { current } = this.props
 
     return (
       groups.map(({ type, name, label }) => (
@@ -116,10 +99,10 @@ class Form extends Component {
           name={name}
           label={label}
           key={name}
-          value={state[name]}
+          value={current[name]}
           placeholder={`Enter ${label}...`}
           handleChange={this.handleChange}
-          error={state.errors[name]}
+          error={current.errors[name]}
         />
       ))
     )
@@ -140,7 +123,19 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  makeContact: PropTypes.func.isRequired,
+  current: PropTypes.object.isRequired,
+  setCurrentContact: PropTypes.func.isRequired,
 }
 
-export default Form
+const mapStateToProps = state => ({
+  current: state.contact.current,
+})
+
+const mapDispatchToProps = dispatch => ({
+  makeContact: contact => makeContact(contact, dispatch),
+  setCurrentContact: contact => setCurrentContact(contact, dispatch),
+  getContacts: id => getContacts(id, dispatch),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form)

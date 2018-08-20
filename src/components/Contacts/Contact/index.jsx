@@ -2,21 +2,19 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { connect } from 'react-redux'
+
+import { deleteContact } from '../../../actions'
 
 import './style.css'
 
-import { Consumer } from '../../../Context'
 import Info from './Info'
 import Icon from './Icon'
 
-import request from '../../../helpers/request'
-
 class Contact extends Component {
-  async onClickDelete(dispatch) {
-    const { contact: { id } } = this.props
-
-    await request.delete(`/users/${id}`)
-    dispatch({ type: 'DELETE_CONTACT', payload: id })
+  onClickDelete = () => {
+    const { contact, deleteContact } = this.props
+    deleteContact(contact.id)
   }
 
   handleClickInfo = () => {
@@ -24,7 +22,7 @@ class Contact extends Component {
     handleClickInfo(contact)
   }
 
-  renderCard = ({ dispatch }) => {
+  render() {
     const { contact, infoId } = this.props
     const showInfo = infoId === contact.id
     const classes = classNames({
@@ -37,7 +35,7 @@ class Contact extends Component {
         <h4>
           {contact.name}
           <Icon handleClick={this.handleClickInfo} classNames={classes} />
-          <Icon handleClick={this.onClickDelete.bind(this, dispatch)} classNames="times icon-delete cp text-danger" />
+          <Icon handleClick={this.onClickDelete} classNames="times icon-delete cp text-danger" />
           <Link to={`/contact/edit/${contact.id}/`}>
             <i className="fa fa-pencil icon-edit" />
           </Link>
@@ -46,18 +44,11 @@ class Contact extends Component {
       </div>
     )
   }
-
-  render() {
-    return (
-      <Consumer>
-        {this.renderCard}
-      </Consumer>
-    )
-  }
 }
 
 Contact.propTypes = {
   handleClickInfo: PropTypes.func.isRequired,
+  deleteContact: PropTypes.func.isRequired,
   contact: PropTypes.shape({
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
@@ -65,4 +56,8 @@ Contact.propTypes = {
   }).isRequired
 }
 
-export default Contact
+const mapDispatchToProps = dispatch => ({
+  deleteContact: id => deleteContact(id, dispatch),
+})
+
+export default connect(null, mapDispatchToProps)(Contact)
