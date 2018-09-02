@@ -17,7 +17,7 @@ const initialState = {
 }
 
 export default (state = initialState, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case GET_CONTACTS:
       return {
         ...state,
@@ -27,29 +27,30 @@ export default (state = initialState, action) => {
     case ADD_CONTACT:
       return {
         ...state,
-        contacts: [action.payload, ...state.contacts]
+        contacts: [action.payload, ...state.contacts],
       }
 
     case UPDATE_CONTACT:
       return {
         ...state,
-        contacts: state.contacts.map(contact => (
-          action.payload.id === contact.id ? action.payload : contact
-        ))
+        contacts: state.contacts.map(
+          contact =>
+            action.payload.id === contact.id ? action.payload : contact,
+        ),
       }
 
     case DELETE_CONTACTS:
       return {
         ...state,
         contacts: state.contacts.filter(
-          contact => action.payload !== contact.id
+          contact => action.payload !== contact.id,
         ),
       }
 
     case CURRENT_CONTACT:
       return {
         ...state,
-        current: {...state.current, ...action.payload},
+        current: { ...state.current, ...action.payload },
       }
 
     default:

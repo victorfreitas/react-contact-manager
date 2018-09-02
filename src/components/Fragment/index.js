@@ -8,6 +8,7 @@ Fragment.defaultProps = {
 
 Fragment.propTypes = {
   show: PropTypes.bool,
+  children: PropTypes.node.isRequired,
 }
 
 export default Fragment

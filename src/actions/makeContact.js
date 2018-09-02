@@ -22,16 +22,18 @@ class MakeContact {
 
   request() {
     request[this.method](this.url, this.contact)
-      .then(contact => (
-        this.dispatch({
-          type: this.type,
-          payload: contact,
-        })
-      ))
-      .catch(() => {})
+      .then(this.contact)
+      .catch(this.error)
   }
+
+  success = contact => {
+    this.dispatch({
+      type: this.type,
+      payload: contact,
+    })
+  }
+
+  error = () => {}
 }
 
-export default contact => dispatch => (
-  new MakeContact(contact, dispatch)
-)
+export default contact => dispatch => new MakeContact(contact, dispatch)

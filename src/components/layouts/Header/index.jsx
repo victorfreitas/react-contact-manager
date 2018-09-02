@@ -2,41 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-const Header = ({ branding }) => (
+import Container from '../Container'
+import Menu from '../Menu'
+
+const Header = ({ brand }) => (
   <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-3 py-0">
-    <div className="container">
+    <Container>
       <Link to="/" className="navbar-brand">
-        {branding}
+        {brand}
       </Link>
-      <div>
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">
-              <i className="fa fa-home" /> Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/contact/add" className="nav-link">
-              <i className="fa fa-plus" /> Add
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/about" className="nav-link">
-              <i className="fa fa-question" /> About
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </div>
+      <Menu />
+    </Container>
   </nav>
 )
 
-Header.defaultProps = {
-  branding: 'The header component',
-}
-
 Header.propTypes = {
-  branding: PropTypes.string.isRequired,
+  brand: PropTypes.string.isRequired,
 }
 
 export default Header

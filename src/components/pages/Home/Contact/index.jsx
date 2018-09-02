@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-
-import { deleteContact } from '../../../actions'
 
 import './style.css'
 
@@ -35,8 +30,8 @@ class Contact extends Component {
       <div className="card card-body mb-3 contact">
         <h4>
           {contact.name}
-          <Icon handleClick={this.handleClickInfo} classNames={classes} />
-          <Icon handleClick={this.onClickDelete} classNames="times icon-delete cp text-danger" />
+          <Icon click={this.handleClickInfo} classNames={classes} />
+          <Icon click={this.onClickDelete} classNames="times icon-delete cp text-danger" />
           <Link to={`/contact/edit/${contact.id}/`}>
             <i className="fa fa-pencil icon-edit" />
           </Link>
@@ -47,20 +42,4 @@ class Contact extends Component {
   }
 }
 
-Contact.propTypes = {
-  handleClickInfo: PropTypes.func.isRequired,
-  deleteContact: PropTypes.func.isRequired,
-  contact: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-  }).isRequired
-}
-
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    deleteContact,
-  }, dispatch)
-)
-
-export default connect(null, mapDispatchToProps)(Contact)
+export default Contact

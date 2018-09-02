@@ -1,20 +1,15 @@
 import React, { Component, Fragment } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 
-import Contact from './Contact'
+import Contact from '../../../containers/pages/home/contact'
 
-import { getContacts } from '../../actions'
-
-class Contacts extends Component {
+class Home extends Component {
   state = {
     infoId: '',
   }
 
   componentDidMount() {
-    const { getContacts } = this.props
-    getContacts()
+    const { fetchContacts } = this.props
+    fetchContacts()
   }
 
   handleClickInfo = (contact) => {
@@ -51,18 +46,4 @@ class Contacts extends Component {
   }
 }
 
-Contacts.propTypes = {
-  contacts: PropTypes.array.isRequired,
-}
-
-const mapStateToProps = state => ({
-  contacts: state.contact.contacts,
-})
-
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    getContacts,
-  }, dispatch)
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(Contacts)
+export default Home
