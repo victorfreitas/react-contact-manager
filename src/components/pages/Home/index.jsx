@@ -38,7 +38,7 @@ class Home extends Component {
     return (
       <Fragment>
         <h1 className="display-4 mb-2">
-          <span className="text-primary">Contact</span> List
+          <span className="text-primary">Contacts</span>
         </h1>
         {this.renderContacts()}
       </Fragment>
