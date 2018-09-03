@@ -2,12 +2,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { fetchContacts } from '../../../actions'
+import { fetchContacts, setIsWait } from '../../../actions'
 import Home from '../../../components/pages/Home'
 
 Home.propTypes = {
   contacts: PropTypes.array.isRequired,
   fetchContacts: PropTypes.func.isRequired,
+  setIsWait: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -16,6 +17,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchContacts,
+  setIsWait,
 }, dispatch)
 
 export default connect(

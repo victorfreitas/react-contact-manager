@@ -8,7 +8,9 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const { fetchContacts } = this.props
+    const { setIsWait, fetchContacts } = this.props
+
+    setIsWait(true)
     fetchContacts()
   }
 

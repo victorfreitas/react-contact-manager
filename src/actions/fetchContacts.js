@@ -1,5 +1,6 @@
 import request from '../helpers/request'
 import { GET_CONTACTS, CURRENT_CONTACT } from './types'
+import removeLoader from './removeLoader'
 
 class FetchContacts {
   constructor(id, dispatch) {
@@ -19,13 +20,16 @@ class FetchContacts {
   }
 
   success = data => {
+    removeLoader(this.dispatch)
     this.dispatch({
       type: this.id ? CURRENT_CONTACT : GET_CONTACTS,
       payload: data,
     })
   }
 
-  error = () => {}
+  error = () => {
+    removeLoader(this.dispatch)
+  }
 }
 
 export default id => dispatch => new FetchContacts(id, dispatch)

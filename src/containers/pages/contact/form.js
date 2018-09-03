@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { makeContact, setCurrentContact, fetchContacts } from '../../../actions'
+import { makeContact, setCurrentContact, fetchContacts, setIsWait } from '../../../actions'
 import Form from '../../../components/pages/Contact/Form'
 
 Form.propTypes = {
@@ -10,6 +10,7 @@ Form.propTypes = {
   makeContact: PropTypes.func.isRequired,
   setCurrentContact: PropTypes.func.isRequired,
   fetchContacts: PropTypes.func.isRequired,
+  setIsWait: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -20,6 +21,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   makeContact,
   setCurrentContact,
   fetchContacts,
+  setIsWait,
 }, dispatch)
 
 export default connect(

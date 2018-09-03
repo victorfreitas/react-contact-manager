@@ -4,9 +4,10 @@ import FormGroups from './FormGroups'
 
 class Form extends Component {
   componentDidMount() {
-    const { fetchContacts } = this.props
+    const { setIsWait, fetchContacts } = this.props
 
     if (this.getIdEdit()) {
+      setIsWait(true)
       fetchContacts(this.getIdEdit())
     }
   }

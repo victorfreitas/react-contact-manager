@@ -9,7 +9,9 @@ import Icon from './Icon'
 
 class Contact extends Component {
   onClickDelete = () => {
-    const { contact, deleteContact } = this.props
+    const { contact, deleteContact, setIsWait } = this.props
+
+    setIsWait(true)
     deleteContact(contact.id)
   }
 

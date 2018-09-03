@@ -1,5 +1,6 @@
 import { ADD_CONTACT, UPDATE_CONTACT } from './types'
 import request from '../helpers/request'
+import removeLoader from './removeLoader'
 
 class MakeContact {
   constructor(contact, dispatch) {
@@ -27,13 +28,16 @@ class MakeContact {
   }
 
   success = contact => {
+    removeLoader(this.dispatch)
     this.dispatch({
       type: this.type,
       payload: contact,
     })
   }
 
-  error = () => {}
+  error = () => {
+    removeLoader(this.dispatch)
+  }
 }
 
 export default contact => dispatch => new MakeContact(contact, dispatch)
