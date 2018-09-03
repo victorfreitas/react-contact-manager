@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
 import './style.css'
 
@@ -8,14 +8,14 @@ import Container from '../layouts/Container'
 import Routes from '../Routes'
 
 const App = () => (
-  <Router>
+  <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
     <Fragment>
       <Header brand="Contact Manager" />
       <Container>
         <Routes />
       </Container>
     </Fragment>
-  </Router>
+  </BrowserRouter>
 )
 
 export default App
